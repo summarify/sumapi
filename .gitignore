@@ -1,0 +1,11 @@
+__pycache__/*
+sumapi/__pycache__/*
+tests/__pycache__/*
+build/
+dist/
+Pipfile
+Pipfile.lock
+.mypy_cache/
+.vscode/
+.idea/
+sumapi.egg-info/
