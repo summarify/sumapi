@@ -7,10 +7,14 @@
 
 ## Installation
 
-The easiest way to install deepface is to download it from [`PyPI`](https://pypi.org/project/sumapi/).
+You can install the sumapi on your computer by following the instructions below.
 
-```python
-pip install sumapi
+```bash
+git clone https://github.com/summarify/sumapi.git
+
+cd sumapi
+
+python setup.py install
 ```
 
 ## Usage
