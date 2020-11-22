@@ -56,6 +56,7 @@ class TestAPI(unittest.TestCase):
         """
 
         response = api.question_answering(context=context, question="Sait Faik nerede doğdu?")
+        print(response)
         self.assertEqual(response['evaluation']['answer'], '(Adapazarı')
 
 if __name__ == '__main__':
