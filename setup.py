@@ -11,7 +11,7 @@ setuptools.setup(
     description="API Library for SumAPI with Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/summarify/sumAPI-Package",
+    url="https://github.com/summarify/sumapi",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
