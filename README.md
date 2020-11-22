@@ -2,7 +2,7 @@
 
 [![License](http://img.shields.io/:license-MIT-blue.svg?style=flat)](https://github.com/summarify/sumapi/blob/master/LICENSE)
 
-<p align="center"><img src="https://raw.githubusercontent.com/summarify/sumapi/master/docs/sumapi_logo.png" width="200" height="240"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/summarify/sumapi/main/docs/sumapi_logo.png" width="200" height="240"></p>
 
 **sumapi** is a 
 
