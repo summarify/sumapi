@@ -162,7 +162,7 @@ class SumAPI:
             token = auth(username='<your_username>', password='<your_password')
             api = SumAPI(token)
 
-            api.classification('GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi', domain='general')
+            api.classification("GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi", domain='general')
             api.classification('Bankanızdan hiç memnun değilim, kredi ürününüz iyi çalışmıyor.', domain='finance')
         """
         data = self.prepare_data(body=text, domain=domain)
