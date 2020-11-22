@@ -1,6 +1,6 @@
 # SumAPI
 
-<p align="center"><img src="https://raw.githubusercontent.com/summarify/sumapi/main/docs/sumapi_logo.png?token=AH3GASK35XNONCNBRHK6ZJ27XLHNQ" width="200" height="200"></p>
+<p align="center"><img src="/docs/sumapi_logo.png" width="200" height="200"></p>
 
 **sumapi** is a 
 
