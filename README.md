@@ -2,7 +2,7 @@
 
 <p align="center"><img src="/docs/sumapi_logo.png" width="200" height="200"></p>
 
-**sumapi** is a 
+**sumapi** is a python framework that makes it easy to use the api product developed by [summarify](https://summarify.io/). With the API product, solutions using cutting edge technology are presented to various NLP problems such as [sentiment analysis](https://en.wikipedia.org/wiki/Sentiment_analysis), [named entitity recognition](https://en.wikipedia.org/wiki/Named-entity_recognition), [question answering](https://en.wikipedia.org/wiki/Question_answering), [domain specific classification](https://en.wikipedia.org/wiki/Document_classification), [zero shot classification](https://en.wikipedia.org/wiki/Zero-shot_learning).
 
 
 ## Installation
