@@ -17,8 +17,10 @@ def auth(username, password):
         Returns
         -------
         dict:
-            access_token: Your API Access Token
-            token_type: Your Token Type
+            access_token: str
+                Your API Access Token
+            token_type: str
+                Your Token Type
 
         Examples
         --------

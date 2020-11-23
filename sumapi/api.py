@@ -110,11 +110,11 @@ class SumAPI:
                     index_num: dict
                         word: str
                             Predicted word
-                        score:
+                        score: float
                             Prediction probability
-                        entitity:
+                        entitity: str
                             Predicted Entitity ['LOC','ORG','MISC','PERSON']
-                        index:
+                        index: integer
                             The word's index in a sentence
             Examples
             --------
