@@ -21,7 +21,7 @@ pip install .
 
 **Authentication**
 
-In order to use the API, you first need to get token with your unique username and password. If you do not have a username and want to test the API, please email us at [info@summarify.io](mailto:info@summarify.io).
+In order to use the API, you first need to get token with your unique username and password. If you do not have a username and want to test the API, please contact us at [info@summarify.io](mailto:info@summarify.io).
 
 ```python
 from sumapi.auth import auth
