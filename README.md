@@ -10,11 +10,7 @@
 You can install the sumapi on your computer by following the instructions below.
 
 ```bash
-git clone https://github.com/summarify/sumapi.git
-
-cd sumapi
-
-pip install .
+pip install sumapi
 ```
 
 ## Usage
@@ -54,7 +50,7 @@ token = auth(username='<your_username>', password='<your_password')
 api = SumAPI(token)
 
 api.named_entity_recognition("Mustafa Kemal Atatürk 19 Mayıs 1919'da Samsun'a ayak bastı.", domain='general')
-#{'body': "Mustafa Kemal Atatürk 19 Mayıs 1919'da Samsun'a ayak bastı.", 'evaluation': 
+#{'body': "Mustafa Kemal Atatürk 19 Mayıs 1919'da Samsun'a ayak bastı.", 'evaluation':
 #                {'0': {'word': 'Mustafa',
 #                   'score': 0.9938516616821289,
 #                   'entity': 'B-PER',
