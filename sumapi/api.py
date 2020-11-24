@@ -86,7 +86,11 @@ class SumAPI:
         """
         data = self.prepare_data(body=text, domain=domain)
 
-        response = requests.post(URL['sentimentURL'], headers=self.headers, json=data).json()
+        try:
+            response = requests.post(URL['sentimentURL'], headers=self.headers, json=data).json()
+        except (ConnectionError) as e:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+
 
         return response
 
@@ -127,8 +131,11 @@ class SumAPI:
             api.named_entity_recognition('GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi.', domain='general')
         """
         data = self.prepare_data(body=text, domain=domain)
+        try:
+            response = requests.post(URL['nerURL'], headers=self.headers, json=data).json()
+        except (ConnectionError) as e:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
 
-        response = requests.post(URL['nerURL'], headers=self.headers, json=data).json()
 
         return response
 
@@ -167,7 +174,10 @@ class SumAPI:
         """
         data = self.prepare_data(body=text, domain=domain)
 
-        response = requests.post(URL['classificationURL'], headers=self.headers, json=data).json()
+        try:
+            response = requests.post(URL['classificationURL'], headers=self.headers, json=data).json()
+        except (ConnectionError) as e:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
 
         return response
 
@@ -208,7 +218,11 @@ class SumAPI:
         """
         data = self.prepare_data(body=text, categories=categories)
 
-        response = requests.post(URL['zeroshotURL'], headers=self.headers, json=data).json()
+        try:
+            response = requests.post(URL['zeroshotURL'], headers=self.headers, json=data).json()
+        except (ConnectionError) as e:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+
 
         return response
 
@@ -249,7 +263,10 @@ class SumAPI:
         """
         data = self.prepare_data(context=context, question=question)
 
+        try:
+            response = requests.post(URL['questionURL'], headers=self.headers, json=data).json()
+        except (ConnectionError) as e:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
 
-        response = requests.post(URL['questionURL'], headers=self.headers, json=data).json()
 
         return response

@@ -1,5 +1,5 @@
 
-BASE_URL = 'http://localhost'
+BASE_URL = 'http://api.summarify.io'
 URL = {
         'tokenURL': f'{BASE_URL}/token',
         'sentimentURL': f'{BASE_URL}/sentiment_analysis',
