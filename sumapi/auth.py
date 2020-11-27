@@ -40,5 +40,8 @@ def auth(username, password):
     except (ConnectionError) as e:
         raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
 
+    if "detail" in response.keys():
+        if response['detail'] == 'Incorrect username or password':
+            raise ValueError("There is an error in the login information. Try again by checking your username and password.")
 
     return response
