@@ -6,5 +6,6 @@ URL = {
         'nerURL': f'{BASE_URL}/ner',
         'classificationURL': f'{BASE_URL}/classification',
         'zeroshotURL': f'{BASE_URL}/zero_shot',
-        'questionURL': f'{BASE_URL}/qa'
+        'questionURL': f'{BASE_URL}/qa',
+        'multirequestURL': f'{BASE_URL}/arguments'
 }

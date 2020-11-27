@@ -2,6 +2,7 @@ from sumapi.auth import auth
 from sumapi.api import SumAPI
 import unittest
 import os
+import pandas as pd
 
 class TestAPI(unittest.TestCase):
     def test_successful_auth(self):
@@ -56,8 +57,36 @@ class TestAPI(unittest.TestCase):
         """
 
         response = api.question_answering(context=context, question="Sait Faik nerede doğdu?")
-        print(response)
         self.assertEqual(response['evaluation']['answer'], '(Adapazarı')
+
+    def test_multi_request(self):
+        df = pd.DataFrame([
+            {
+              "body": "Bu güzel bir filmdi.",
+              "model_name": "sentiment",
+              "domain": "general"
+            },
+            {
+              "body": "GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi..",
+              "model_name": "classification",
+              "domain": "general"
+            },
+            {
+              "body": "Bankanızdan hiç memnun değilim, kredi ürününüz iyi çalışmıyor.",
+              "model_name": "classification",
+              "domain": "finance"
+            },
+            {
+              "body": "Summarify, 2020 yılında istanbulda kurulmuş bir doğal dil işleme ve yapay zeka şirketidir..",
+              "model_name": "ner",
+              "domain": "general"
+            }])
+
+        print(df.head())
+
+        response = api.multi_request(df)
+
+
 
 if __name__ == '__main__':
     unittest.main()

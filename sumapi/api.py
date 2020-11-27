@@ -1,4 +1,5 @@
 import requests
+import json
 from .config import URL
 
 
@@ -268,5 +269,74 @@ class SumAPI:
         except (ConnectionError) as e:
             raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
 
+
+        return response
+
+
+    def multi_request(self, data):
+        """
+            It allows you to make multiple queries to different products at the same time. We recommend this for large datasets.
+
+            Parameters
+            ----------
+            data : pandas.dataframe
+                Your requests dataframe, an example can be find on Examples page.
+                body: str
+                    Your sample text.
+                model_name: str
+                    the product you want to run ['sentiment', 'classification', 'ner']
+                domain: str
+                    Model Domain, It may differ depending on the product.
+                        sentiment : ['general']
+                        classification: ['general', 'finance']
+                        ner: ['general']
+
+            Returns
+            -------
+            evaluations: dict
+                Outputs of all models are listed one by one. The output may vary depending on the product you use.
+
+
+            Examples
+            --------
+            from sumapi.auth import auth
+            from sumapi.api import SumAPI
+            import pandas as pd
+
+            df = pd.DataFrame([
+                {
+                  "body": "Bu güzel bir filmdi.",
+                  "model_name": "sentiment",
+                  "domain": "general"
+                },
+                {
+                  "body": "GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi..",
+                  "model_name": "classification",
+                  "domain": "general"
+                },
+                {
+                  "body": "Bankanızdan hiç memnun değilim, kredi ürününüz iyi çalışmıyor.",
+                  "model_name": "classification",
+                  "domain": "finance"
+                },
+                {
+                  "body": "Summarify, 2020 yılında istanbulda kurulmuş bir doğal dil işleme ve yapay zeka şirketidir..",
+                  "model_name": "ner",
+                  "domain": "general"
+                }])
+
+            print(df.head())
+
+            token = auth(username='<your_username>', password='<your_password')
+            api = SumAPI(token)
+
+            api.multi_request(data=data)
+        """
+        data = {"argList": json.loads(data.to_json(orient='records'))}
+
+        try:
+            response = requests.post(URL['multirequestURL'], headers=self.headers, json=data).json()
+        except (ConnectionError) as e:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
 
         return response
