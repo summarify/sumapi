@@ -60,6 +60,9 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response['evaluation']['answer'], '(Adapazarı')
 
     def test_multi_request(self):
+        token = auth(username=os.environ.get('sum_api_username'), password=os.environ.get('sum_api_password'))
+        api = SumAPI(token)
+
         df = pd.DataFrame([
             {
               "body": "Bu güzel bir filmdi.",
@@ -82,10 +85,8 @@ class TestAPI(unittest.TestCase):
               "domain": "general"
             }])
 
-        print(df.head())
-
         response = api.multi_request(df)
-
+        self.assertEqual(response['evaluations'][0]['evaluation']['label'], 'positive')
 
 
 if __name__ == '__main__':
