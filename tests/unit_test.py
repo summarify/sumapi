@@ -9,10 +9,6 @@ class TestAPI(unittest.TestCase):
         token = auth(username=os.environ.get('sum_api_username'), password=os.environ.get('sum_api_password'))
         self.assertEqual(token['token_type'], 'bearer')
 
-    def test_unsuccessful_auth(self):
-        token = auth(username='123', password='123')
-        self.assertEqual(token['detail'], 'Incorrect username or password')
-
     def test_sentiment_analysis(self):
         token = auth(username=os.environ.get('sum_api_username'), password=os.environ.get('sum_api_password'))
         api = SumAPI(token)

@@ -113,6 +113,70 @@ api.question_answering(context=context, question="Sait Faik nerede doğdu?")
 # {'body': 'Sait Faik nerede doğdu?', 'evaluation': {'score': 0.9611985087394714, 'answer': 'Adapazarı'}}
 ```
 
+**Multi Argument**
+
+```python
+from sumapi.auth import auth
+from sumapi.api import SumAPI
+import pandas as pd
+
+token = auth(username='<your_username>', password='<your_password')
+api = SumAPI(token)
+
+df = pd.DataFrame([
+          {
+            "body": "Bu güzel bir filmdi.",
+            "model_name": "sentiment",
+            "domain": "general"
+          },
+          {
+            "body": "GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi..",
+            "model_name": "classification",
+            "domain": "general"
+          },
+          {
+            "body": "Bankanızdan hiç memnun değilim, kredi ürününüz iyi çalışmıyor.",
+            "model_name": "classification",
+            "domain": "finance"
+          },
+          {
+            "body": "Summarify, 2020 yılında istanbulda kurulmuş bir doğal dil işleme ve yapay zeka şirketidir..",
+            "model_name": "ner",
+            "domain": "general"
+          }])
+
+print(df.head())
+
+api.multi_request(data=data)
+#{'evaluations': [{'body': 'Bu güzel bir filmdi.',
+#   'evaluation': {'label': 'positive', 'score': 0.9714869260787964}},
+#  {'body': "GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi..",
+#   'evaluation': {'label': 'technology', 'score': 0.9982953667640686}},
+#  {'body': 'Bankanızdan hiç memnun değilim, kredi ürününüz iyi çalışmıyor.',
+#   'evaluation': {'label': 'kredi'}},
+#  {'body': 'Summarify, 2020 yılında istanbulda kurulmuş bir doğal dil işleme ve yapay zeka şirketidir..',
+#   'evaluation': {'0': {'word': 'Sum',
+#     'score': 0.6308539509773254,
+#     'entity': 'B-ORG',
+#     'index': 1},
+#    '1': {'word': '##mar',
+#     'score': 0.6408769488334656,
+#     'entity': 'I-ORG',
+#     'index': 2},
+#    '2': {'word': '##if',
+#     'score': 0.8179663419723511,
+#     'entity': 'I-ORG',
+#     'index': 3},
+#    '3': {'word': '##y',
+#     'score': 0.5688334703445435,
+#     'entity': 'I-ORG',
+#     'index': 4},
+#    '4': {'word': 'istanbul',
+#     'score': 0.9028254747390747,
+#     'entity': 'B-LOC',
+#     'index': 8}}}]}
+```
+
 
 ## Licence
 
