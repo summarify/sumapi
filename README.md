@@ -147,7 +147,7 @@ df = pd.DataFrame([
 
 print(df.head())
 
-api.multi_request(data=data)
+api.multi_request(data=df)
 #{'evaluations': [{'body': 'Bu güzel bir filmdi.',
 #   'evaluation': {'label': 'positive', 'score': 0.9714869260787964}},
 #  {'body': "GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi..",
