@@ -21,7 +21,7 @@ class TestAPI(unittest.TestCase):
         api = SumAPI(token)
 
         response = api.named_entity_recognition("Atatürk, 19 Mayıs 1919'da Samsuna çıktı")
-        self.assertEqual(response['evaluation']['0']['entity'], 'B-PER')
+        self.assertEqual(response['evaluation']['text'], "Mustafa Kemal Atatürk 19 Mayıs 1919 ' da Samsun ' a ayak bastı . ")
 
     def test_general_classification(self):
         token = auth(username=os.environ.get('sum_api_username'), password=os.environ.get('sum_api_password'))

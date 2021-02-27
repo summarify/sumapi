@@ -50,23 +50,56 @@ token = auth(username='<your_username>', password='<your_password')
 api = SumAPI(token)
 
 api.named_entity_recognition("Mustafa Kemal Atatürk 19 Mayıs 1919'da Samsun'a ayak bastı.", domain='general')
-#{'body': "Mustafa Kemal Atatürk 19 Mayıs 1919'da Samsun'a ayak bastı.", 'evaluation':
-#                {'0': {'word': 'Mustafa',
-#                   'score': 0.9938516616821289,
-#                   'entity': 'B-PER',
-#                   'index': 1},
-#                  '1': {'word': 'Kemal',
-#                   'score': 0.9881671071052551,
-#                   'entity': 'I-PER',
-#                   'index': 2},
-#                  '2': {'word': 'Atatürk',
-#                   'score': 0.9957979321479797,
-#                   'entity': 'I-PER',
-#                   'index': 3},
-#                  '3': {'word': 'Samsun',
-#                   'score': 0.9059983491897583,
-#                   'entity': 'B-LOC',
-#                   'index': 9}}} """
+#{
+#  "body": "Mustafa Kemal Atatürk 19 Mayıs 1919'da Samsun'a ayak bastı.",
+#  "evaluation": {
+#    "text": "Mustafa Kemal Atatürk 19 Mayıs 1919 ' da Samsun ' a ayak bastı . ",
+#    "labels": [
+#      [
+#        0,
+#        7,
+#        "B-Person",
+#        0.9994454979896545
+#      ],
+#      [
+#        8,
+#        13,
+#        "I-Person",
+#        0.999332070350647
+#      ],
+#      [
+#        14,
+#        21,
+#        "I-Person",
+#        0.999338686466217
+#      ],
+#      [
+#        22,
+#        24,
+#        "B-Date",
+#        0.8490145802497864
+#      ],
+#      [
+#        25,
+#        30,
+#        "I-Date",
+#        0.8429246544837952
+#      ],
+#      [
+#        31,
+#        35,
+#        "I-Date",
+#        0.779156506061554
+#      ],
+#      [
+#        41,
+#        47,
+#        "B-Location",
+#        0.9813851118087769
+#      ]
+#    ]
+#  }
+#} """
 ```
 
 **Classification**
