@@ -34,14 +34,15 @@ def auth(username, password):
     }
 
     try:
-        response = requests.post(URL["tokenURL"], data=login_data).json()
+        response = requests.post(URL["tokenURL"], data=login_data)
+        response_json = response.json()
     except JSONDecodeError:
-        response = requests.post(URL["tokenURL"], data=login_data).json()
+        return response
     except (ConnectionError) as e:
         raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
 
-    if "detail" in response.keys():
-        if response['detail'] == 'Incorrect username or password':
+    if "detail" in response_json.keys():
+        if response_json['detail'] == 'Incorrect username or password':
             raise ValueError("There is an error in the login information. Try again by checking your username and password.")
 
-    return response
+    return response_json

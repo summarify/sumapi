@@ -88,12 +88,14 @@ class SumAPI:
         data = self.prepare_data(body=text, domain=domain)
 
         try:
-            response = requests.post(URL['sentimentURL'], headers=self.headers, json=data).json()
+            response = requests.post(URL['sentimentURL'], headers=self.headers, json=data)
+            response_json = response.json()
         except (ConnectionError) as e:
             raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+        except json.JSONDecodeError:
+            return response.content
 
-
-        return response
+        return response_json
 
     def named_entity_recognition(self, text, domain='general'):
         """
@@ -133,12 +135,14 @@ class SumAPI:
         """
         data = self.prepare_data(body=text, domain=domain)
         try:
-            response = requests.post(URL['nerURL'], headers=self.headers, json=data).json()
+            response = requests.post(URL['nerURL'], headers=self.headers, json=data)
+            response_json = response.json()
         except (ConnectionError) as e:
             raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+        except json.JSONDecodeError:
+            return response.content
 
-
-        return response
+        return response_json
 
     def classification(self, text, domain='general'):
         """
@@ -176,11 +180,14 @@ class SumAPI:
         data = self.prepare_data(body=text, domain=domain)
 
         try:
-            response = requests.post(URL['classificationURL'], headers=self.headers, json=data).json()
+            response = requests.post(URL['classificationURL'], headers=self.headers, json=data)
+            response_json = response.json()
         except (ConnectionError) as e:
             raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+        except json.JSONDecodeError:
+            return response.content
 
-        return response
+        return response_json
 
     def zero_shot_classification(self, text, categories):
         """
@@ -220,12 +227,14 @@ class SumAPI:
         data = self.prepare_data(body=text, categories=categories)
 
         try:
-            response = requests.post(URL['zeroshotURL'], headers=self.headers, json=data).json()
+            response = requests.post(URL['zeroshotURL'], headers=self.headers, json=data)
+            response_json = response.json()
         except (ConnectionError) as e:
             raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+        except json.JSONDecodeError:
+            return response.content
 
-
-        return response
+        return response_json
 
     def question_answering(self, context, question):
         """
@@ -265,12 +274,14 @@ class SumAPI:
         data = self.prepare_data(context=context, question=question)
 
         try:
-            response = requests.post(URL['questionURL'], headers=self.headers, json=data).json()
+            response = requests.post(URL['questionURL'], headers=self.headers, json=data)
+            response_json = response.json()
         except (ConnectionError) as e:
             raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+        except json.JSONDecodeError:
+            return response.content
 
-
-        return response
+        return response_json
 
 
     def multi_request(self, data):
@@ -335,8 +346,11 @@ class SumAPI:
         data = {"argList": json.loads(data.to_json(orient='records'))}
 
         try:
-            response = requests.post(URL['multirequestURL'], headers=self.headers, json=data).json()
+            response = requests.post(URL['multirequestURL'], headers=self.headers, json=data)
+            response_json = reponse.json()
         except (ConnectionError) as e:
             raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
-
-        return response
+        except json.JSONDecodeError:
+            return response.content
+        
+        return response_json
