@@ -347,7 +347,7 @@ class SumAPI:
 
         try:
             response = requests.post(URL['multirequestURL'], headers=self.headers, json=data)
-            response_json = reponse.json()
+            response_json = response.json()
         except (ConnectionError) as e:
             raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
         except json.JSONDecodeError:
