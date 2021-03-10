@@ -7,5 +7,6 @@ URL = {
         'classificationURL': f'{BASE_URL}/classification',
         'zeroshotURL': f'{BASE_URL}/zero-shot',
         'questionURL': f'{BASE_URL}/qa',
-        'multirequestURL': f'{BASE_URL}/arguments'
+        'multirequestURL': f'{BASE_URL}/arguments',
+        'summarizationURL': f'{BASE_URL}/summarize'
 }

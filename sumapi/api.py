@@ -1,5 +1,6 @@
 import requests
 import json
+from json import JSONDecodeError
 from .config import URL
 
 
@@ -31,13 +32,14 @@ class SumAPI:
             'Authorization': f'Bearer {self.token}',
             'Content-Type': 'application/json'}
 
-    def prepare_data(self, body=None, domain=None, categories=None, context=None, question=None):
+    def prepare_data(self, body=None, domain=None, categories=None, context=None, question=None, percentage=None):
         """
             Function to create json for queries.
         """
-        if domain != None:
+        if percentage != None:
             data = {
                 'body': body,
+                'percentage': percentage,
                 'domain': domain
             }
         elif categories != None:
@@ -49,6 +51,11 @@ class SumAPI:
             data = {
                 'context': context,
                 'question': question
+            }
+        elif domain != None:
+            data = {
+                'body': body,
+                'domain': domain
             }
 
         return data
@@ -90,10 +97,11 @@ class SumAPI:
         try:
             response = requests.post(URL['sentimentURL'], headers=self.headers, json=data)
             response_json = response.json()
-        except (ConnectionError) as e:
-            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
-        except json.JSONDecodeError:
+        except JSONDecodeError:
             return response.content
+        except ConnectionError:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+        
 
         return response_json
 
@@ -131,16 +139,17 @@ class SumAPI:
             token = auth(username='<your_username>', password='<your_password')
             api = SumAPI(token)
 
-            api.named_entity_recognition('GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi.', domain='general')
+            api.named_entity_recognition("GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi.", domain='general')
         """
         data = self.prepare_data(body=text, domain=domain)
         try:
             response = requests.post(URL['nerURL'], headers=self.headers, json=data)
             response_json = response.json()
-        except (ConnectionError) as e:
-            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
-        except json.JSONDecodeError:
+        except JSONDecodeError:
             return response.content
+        except ConnectionError:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+        
 
         return response_json
 
@@ -182,10 +191,11 @@ class SumAPI:
         try:
             response = requests.post(URL['classificationURL'], headers=self.headers, json=data)
             response_json = response.json()
-        except (ConnectionError) as e:
-            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
-        except json.JSONDecodeError:
+        except JSONDecodeError:
             return response.content
+        except ConnectionError:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+        
 
         return response_json
 
@@ -229,10 +239,10 @@ class SumAPI:
         try:
             response = requests.post(URL['zeroshotURL'], headers=self.headers, json=data)
             response_json = response.json()
-        except (ConnectionError) as e:
-            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
-        except json.JSONDecodeError:
+        except JSONDecodeError:
             return response.content
+        except ConnectionError:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
 
         return response_json
 
@@ -276,10 +286,10 @@ class SumAPI:
         try:
             response = requests.post(URL['questionURL'], headers=self.headers, json=data)
             response_json = response.json()
-        except (ConnectionError) as e:
-            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
-        except json.JSONDecodeError:
+        except JSONDecodeError:
             return response.content
+        except ConnectionError:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
 
         return response_json
 
@@ -346,11 +356,62 @@ class SumAPI:
         data = {"argList": json.loads(data.to_json(orient='records'))}
 
         try:
-            response = requests.post(URL['multirequestURL'], headers=self.headers, json=data)
+            response = requests.post(URL['multirequestURL'], headers=self.headers, json=data, timeout=3600)
             response_json = response.json()
-        except (ConnectionError) as e:
-            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
-        except json.JSONDecodeError:
+        except JSONDecodeError:
             return response.content
+        except ConnectionError:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
         
+        return response_json
+
+    def summarization(self, text, percentage=0.5, domain='SumBasic'):
+        """
+            It makes Summarization for the sentences / samples you send.
+
+            Parameters
+            ----------
+            text : str
+                Your sample text.
+            percentage: float
+                Percentage of the text you want to summarize. It takes values between 0 and 1. 1 gives the shortest summary and 0 the longest summary.
+            domain: str
+                Model Domain ['SumBasic','SumComplex']
+                    SumBasic: Extraction Based Summarization with Statistical Algorithms
+                    SumComplex: Abstraction Based Summarization with Cutting Edge Algorithms
+
+            Returns
+            -------
+            dict:
+                body: str
+                    Your sample text.
+                evaluation: dict
+                    summarized_text: str
+                        Summarized Text
+                    
+
+            Examples
+            --------
+            from sumapi.auth import auth
+            from sumapi.api import SumAPI
+
+            token = auth(username='<your_username>', password='<your_password')
+            api = SumAPI(token)
+            
+            sample_text = "First of all, numerous software patches must be conducted to keep systems up to date. Cyber ​​attackers that use malware are trying to infiltrate company networks via abusing some undetected vulnerabilities within their software. According to a survey by security company Tripwire, one in three IT professionals said their company was infiltrated through an unpatched vulnerability. Thus, the validity of the patches should be constantly in check. Secondly, the devices that are connected to the network should be frequently monitored. Recognizing requests from devices that are connected to the main network is one of the most important areas of protection against malware. If the monitoring is missed, an evil ransomware gang can detect some vulnerabilities of the remote access doors. The more preferable scenario is having ethical hackers discover those potentially infected computers. Moreover, the most important data should be determined and an effective backup strategy should be implemented. It is very important to operate backups of important data to protect it against cyber attackers. If crypto ransomware enters the system and captures some devices, the data can be restored thanks to a recent backup, and the related devices can become operational in a short time. Yet, the first move of a hacker is almost always to cut access to those backups, so strong protection of those backups is also essential."
+
+            api.summarization(text=sample_text, percentage=0.5, domain='SumBasic')
+            api.summarization(text=sample_text, percentage=0.5, domain='SumComplex')
+        """
+        data = self.prepare_data(body=text, domain=domain, percentage=percentage)
+        print(data)
+        try:
+            response = requests.post(URL['summarizationURL'], headers=self.headers, json=data)
+            response_json = response.json()
+        except JSONDecodeError:
+            return response.content
+        except ConnectionError:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+        
+
         return response_json

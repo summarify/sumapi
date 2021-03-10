@@ -118,6 +118,21 @@ api.classification('Bankanızdan hiç memnun değilim, kredi ürününüz iyi ç
 # {'body': 'Bankanızdan hiç memnun değilim, kredi ürününüz iyi çalışmıyor.', 'evaluation': {'label': 'kredi'}}
 ```
 
+**Summarization**
+
+```python
+from sumapi.auth import auth
+from sumapi.api import SumAPI
+
+token = auth(username='<your_username>', password='<your_password')
+api = SumAPI(token)
+
+sample_text = "First of all, numerous software patches must be conducted to keep systems up to date. Cyber ​​attackers that use malware are trying to infiltrate company networks via abusing some undetected vulnerabilities within their software. According to a survey by security company Tripwire, one in three IT professionals said their company was infiltrated through an unpatched vulnerability. Thus, the validity of the patches should be constantly in check. Secondly, the devices that are connected to the network should be frequently monitored. Recognizing requests from devices that are connected to the main network is one of the most important areas of protection against malware. If the monitoring is missed, an evil ransomware gang can detect some vulnerabilities of the remote access doors. The more preferable scenario is having ethical hackers discover those potentially infected computers. Moreover, the most important data should be determined and an effective backup strategy should be implemented. It is very important to operate backups of important data to protect it against cyber attackers. If crypto ransomware enters the system and captures some devices, the data can be restored thanks to a recent backup, and the related devices can become operational in a short time. Yet, the first move of a hacker is almost always to cut access to those backups, so strong protection of those backups is also essential."
+
+api.summarization(text=sample_text, percentage=0.5, domain='SumBasic')     
+api.summarization(text=sample_text, percentage=0.5, domain='SumComplex')
+```
+
 **Zero Shot Classification**
 
 ```python
