@@ -131,6 +131,7 @@ sample_text = "First of all, numerous software patches must be conducted to keep
 
 api.summarization(text=sample_text, percentage=0.5, domain='SumBasic')     
 api.summarization(text=sample_text, percentage=0.5, domain='SumComplex')
+api.summarization(text=sample_text, word_count=100, domain='SumComplex')
 ```
 
 **Zero Shot Classification**
