@@ -32,15 +32,16 @@ class SumAPI:
             'Authorization': f'Bearer {self.token}',
             'Content-Type': 'application/json'}
 
-    def prepare_data(self, body=None, domain=None, categories=None, context=None, question=None, percentage=None):
+    def prepare_data(self, body=None, domain=None, categories=None, context=None, question=None, percentage=None, word_count=None):
         """
             Function to create json for queries.
         """
-        if percentage != None:
+        if percentage != None or word_count != None:
             data = {
                 'body': body,
                 'percentage': percentage,
-                'domain': domain
+                'domain': domain,
+                'word_count': word_count
             }
         elif categories != None:
             data = {
@@ -365,7 +366,7 @@ class SumAPI:
         
         return response_json
 
-    def summarization(self, text, percentage=0.5, domain='SumBasic'):
+    def summarization(self, text, percentage=None, word_count=None, domain='SumBasic'):
         """
             It makes Summarization for the sentences / samples you send.
 
@@ -402,9 +403,10 @@ class SumAPI:
 
             api.summarization(text=sample_text, percentage=0.5, domain='SumBasic')
             api.summarization(text=sample_text, percentage=0.5, domain='SumComplex')
+            api.summarization(text=sample_text, word_count=100, domain='SumComplex')
         """
-        data = self.prepare_data(body=text, domain=domain, percentage=percentage)
-        print(data)
+        data = self.prepare_data(body=text, domain=domain, percentage=percentage, word_count=word_count)
+
         try:
             response = requests.post(URL['summarizationURL'], headers=self.headers, json=data)
             response_json = response.json()
