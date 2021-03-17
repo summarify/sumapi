@@ -1,4 +1,5 @@
 import requests
+from tqdm import tqdm
 import json
 from json import JSONDecodeError
 from .config import URL
@@ -354,17 +355,36 @@ class SumAPI:
 
             api.multi_request(data=data)
         """
-        data = {"argList": json.loads(data.to_json(orient='records'))}
+        if len(data) > 250:
+            packet_count = int(len(data) / 250)
+            packet_odd = len(data) % 250
+            evaluations = []
 
-        try:
-            response = requests.post(URL['multirequestURL'], headers=self.headers, json=data, timeout=3600)
-            response_json = response.json()
-        except JSONDecodeError:
-            return response.content
-        except ConnectionError:
-            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
-        
-        return response_json
+            try:
+                for packet in tqdm(range(1,packet_count+1), desc=f'Packet:'):
+                    if packet == packet_count:
+                        jdata = {"argList": json.loads(data[packet*250-250:packet*250+packet_odd].to_json(orient='records'))}
+                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                        evaluations += response.json()['evaluations']
+                    else:
+                        jdata = {"argList": json.loads(data[packet*250-250:packet*250].to_json(orient='records'))}
+                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                        evaluations += response.json()['evaluations']
+            except JSONDecodeError:
+                return response.content
+            except ConnectionError:
+                raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+            
+            return json.dumps({'evaluations': evaluations})
+        else:
+            try:
+                response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_dict(orient='records'))})
+                response_json = response.json()
+            except JSONDecodeError:
+                return response.content
+            except ConnectionError:
+                raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+
 
     def summarization(self, text, percentage=None, word_count=None, domain='SumBasic'):
         """
