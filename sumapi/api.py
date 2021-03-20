@@ -437,3 +437,46 @@ class SumAPI:
         
 
         return response_json
+    
+    def spell_check(self, text, domain='general'):
+        """
+            It makes spell checking for the sentences / samples you send.
+
+            Parameters
+            ----------
+            text : str
+                Your sample text.
+            domain: str
+                Model Domain ['general']
+
+            Returns
+            -------
+            dict:
+                body: str
+                    Your sample text.
+                evaluation: dict
+                    evaluation: str
+                        Spell Checked Sentence
+
+            Examples
+            --------
+            from sumapi.auth import auth
+            from sumapi.api import SumAPI
+
+            token = auth(username='<your_username>', password='<your_password>')
+            api = SumAPI(token)
+
+            api.spell_check('bu hstali cumle duzelexek gibi dutuyor.', domain='general')
+        """
+        data = self.prepare_data(body=text, domain=domain)
+
+        try:
+            response = requests.post(URL['spellCheckURL'], headers=self.headers, json=data)
+            response_json = response.json()
+        except JSONDecodeError:
+            return response.content
+        except ConnectionError:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+        
+
+        return response_json

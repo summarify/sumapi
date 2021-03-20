@@ -134,6 +134,24 @@ api.summarization(text=sample_text, percentage=0.5, domain='SumComplex')
 api.summarization(text=sample_text, word_count=100, domain='SumComplex')
 ```
 
+**Spell Check**
+
+```python           
+from sumapi.auth import auth
+from sumapi.api import SumAPI
+
+token = auth(username='<your_username>', password='<your_password>')
+api = SumAPI(token)
+
+api.spell_check('bu hstali cumle duzelexek gibi dutuyor.', domain='general')
+#{
+#  "body": "bu hstali cumle duzelexek gibi dutuyor.",
+#  "evaluation": {
+#    "evaluation": "bu hatalı cümle düzelecek gibi duruyor "
+#  }
+#}
+```
+
 **Zero Shot Classification**
 
 ```python

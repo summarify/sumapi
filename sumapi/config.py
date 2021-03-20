@@ -8,5 +8,6 @@ URL = {
         'zeroshotURL': f'{BASE_URL}/zero-shot',
         'questionURL': f'{BASE_URL}/qa',
         'multirequestURL': f'{BASE_URL}/arguments',
-        'summarizationURL': f'{BASE_URL}/summarize'
+        'summarizationURL': f'{BASE_URL}/summarize',
+        'spellCheckURL': f'{BASE_URL}/spell-check'
 }
