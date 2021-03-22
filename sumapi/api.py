@@ -378,7 +378,7 @@ class SumAPI:
             return json.dumps({'evaluations': evaluations})
         else:
             try:
-                response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_dict(orient='records'))})
+                response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
                 response_json = response.json()
             except JSONDecodeError:
                 return response.content
