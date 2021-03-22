@@ -380,6 +380,7 @@ class SumAPI:
             try:
                 response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
                 response_json = response.json()
+                return response_json
             except JSONDecodeError:
                 return response.content
             except ConnectionError:
