@@ -375,7 +375,7 @@ class SumAPI:
             except ConnectionError:
                 raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
             
-            return json.dumps({'evaluations': evaluations})
+            return {'evaluations': evaluations}
         else:
             try:
                 response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
