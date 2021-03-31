@@ -22,18 +22,16 @@ In order to use the API, you first need to get token with your unique username a
 ```python
 from sumapi.auth import auth
 
-token = auth(username='<your_username>', password='<your_password')
+api = SumAPI(username='<your_username>', password='<your_password')
 # {'access_token': 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', 'token_type': 'bearer'}
 ```
 
 **Sentiment Analysis**
 
 ```python
-from sumapi.auth import auth
 from sumapi.api import SumAPI
 
-token = auth(username='<your_username>', password='<your_password')
-api = SumAPI(token)
+api = SumAPI(username='<your_username>', password='<your_password')
 
 api.sentiment_analysis('Bu harika bir filmdi.', domain='general')
 # {'body': 'Bu harika bir filmdi.', 'evaluation': {'label': 'positive', 'score': 0.983938992023468}}
@@ -43,11 +41,9 @@ api.sentiment_analysis('Bu harika bir filmdi.', domain='general')
 **Named Entitity Recognition**
 
 ```python
-from sumapi.auth import auth
 from sumapi.api import SumAPI
 
-token = auth(username='<your_username>', password='<your_password')
-api = SumAPI(token)
+api = SumAPI(username='<your_username>', password='<your_password')
 
 api.named_entity_recognition("Mustafa Kemal Atatürk 19 Mayıs 1919'da Samsun'a ayak bastı.", domain='general')
 #{
@@ -105,11 +101,9 @@ api.named_entity_recognition("Mustafa Kemal Atatürk 19 Mayıs 1919'da Samsun'a 
 **Classification**
 
 ```python
-from sumapi.auth import auth
 from sumapi.api import SumAPI
 
-token = auth(username='<your_username>', password='<your_password')
-api = SumAPI(token)
+api = SumAPI(username='<your_username>', password='<your_password')
 
 api.classification("GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi", domain='general')
 # {'body': "GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi", 'evaluation': {'label': 'technology', 'score': 0.9983301758766174}}
@@ -121,11 +115,9 @@ api.classification('Bankanızdan hiç memnun değilim, kredi ürününüz iyi ç
 **Summarization**
 
 ```python
-from sumapi.auth import auth
 from sumapi.api import SumAPI
 
-token = auth(username='<your_username>', password='<your_password')
-api = SumAPI(token)
+api = SumAPI(username='<your_username>', password='<your_password')
 
 sample_text = "First of all, numerous software patches must be conducted to keep systems up to date. Cyber ​​attackers that use malware are trying to infiltrate company networks via abusing some undetected vulnerabilities within their software. According to a survey by security company Tripwire, one in three IT professionals said their company was infiltrated through an unpatched vulnerability. Thus, the validity of the patches should be constantly in check. Secondly, the devices that are connected to the network should be frequently monitored. Recognizing requests from devices that are connected to the main network is one of the most important areas of protection against malware. If the monitoring is missed, an evil ransomware gang can detect some vulnerabilities of the remote access doors. The more preferable scenario is having ethical hackers discover those potentially infected computers. Moreover, the most important data should be determined and an effective backup strategy should be implemented. It is very important to operate backups of important data to protect it against cyber attackers. If crypto ransomware enters the system and captures some devices, the data can be restored thanks to a recent backup, and the related devices can become operational in a short time. Yet, the first move of a hacker is almost always to cut access to those backups, so strong protection of those backups is also essential."
 
@@ -137,11 +129,9 @@ api.summarization(text=sample_text, word_count=100, domain='SumComplex')
 **Spell Check**
 
 ```python           
-from sumapi.auth import auth
 from sumapi.api import SumAPI
 
-token = auth(username='<your_username>', password='<your_password>')
-api = SumAPI(token)
+api = SumAPI(username='<your_username>', password='<your_password')
 
 api.spell_check('bu hstali cumle duzelexek gibi dutuyor.', domain='general')
 #{
@@ -155,11 +145,9 @@ api.spell_check('bu hstali cumle duzelexek gibi dutuyor.', domain='general')
 **Zero Shot Classification**
 
 ```python
-from sumapi.auth import auth
 from sumapi.api import SumAPI
 
-token = auth(username='<your_username>', password='<your_password')
-api = SumAPI(token)
+api = SumAPI(username='<your_username>', password='<your_password')
 
 api.zero_shot_classification('Bu nasıl bir hizmet, gerçekten rezilsiniz.', categories='talep,şikayet,öneri')
 # {'body': 'Bu nasıl bir hizmet, gerçekten rezilsiniz.', 'evaluation': {'sequence': 'Bu nasıl bir hizmet, gerçekten rezilsiniz.', 'labels': ['şikayet', 'öneri', 'talep'], 'scores': [0.97139573097229, 0.8201411962509155, 0.5891757011413574], 'label': 'şikayet'}}
@@ -168,11 +156,9 @@ api.zero_shot_classification('Bu nasıl bir hizmet, gerçekten rezilsiniz.', cat
 **Question Answering**
 
 ```python
-from sumapi.auth import auth
 from sumapi.api import SumAPI
 
-token = auth(username='<your_username>', password='<your_password')
-api = SumAPI(token)
+api = SumAPI(username='<your_username>', password='<your_password')
 
 context = """ABASIYANIK, Sait Faik. Hikayeci (Adapazarı 23 Kasım 1906-İstanbul 11 Mayıs 1954). İlk öğrenimine Adapazarı’nda Rehber-i Terakki Mektebi’nde başladı. İki yıl kadar Adapazarı İdadisi’nde okudu. İstanbul Erkek Lisesi’nde devam ettiği orta öğrenimini Bursa Lisesi’nde tamamladı (1928). İstanbul Edebiyat Fakültesi’ne iki yıl devam ettikten sonra babasının isteği üzerine iktisat öğrenimi için İsviçre’ye gitti. Kısa süre sonra iktisat öğrenimini bırakarak Lozan’dan Grenoble’a geçti. Üç yıl başıboş bir edebiyat öğrenimi gördükten sonra babası tarafından geri çağrıldı (1933). Bir müddet Halıcıoğlu Ermeni Yetim Mektebi'nde Türkçe grup dersleri öğretmenliği yaptı. Ticarete atıldıysa da tutunamadı. Bir ay Haber gazetesinde adliye muhabirliği yaptı (1942). Babasının ölümü üzerine aileden kalan emlakin geliri ile avare bir hayata başladı. Evlenemedi. Yazları Burgaz adasındaki köşklerinde, kışları Şişli’deki apartmanlarında annesi ile beraber geçen bu fazla içkili bohem hayatı ömrünün sonuna kadar sürdü."""
 
@@ -183,12 +169,10 @@ api.question_answering(context=context, question="Sait Faik nerede doğdu?")
 **Multi Argument**
 
 ```python
-from sumapi.auth import auth
 from sumapi.api import SumAPI
 import pandas as pd
 
-token = auth(username='<your_username>', password='<your_password')
-api = SumAPI(token)
+api = SumAPI(username='<your_username>', password='<your_password')
 
 df = pd.DataFrame([
           {

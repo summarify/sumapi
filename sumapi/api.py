@@ -6,32 +6,75 @@ from .config import URL
 
 
 class SumAPI:
-    def __init__(self, auth):
+    def __init__(self, username, password):
         """
             In order to send requests in the API, you need to define your token in this class.
 
             Parameters
             ----------
-            auth : dict
-                Must contain your access_token and token_type, you can get this with Auth function.
+            username : str
+                Your API Username
+            password : str
+                Your API Password
 
             Examples
             --------
-            from sumapi.auth import auth
             from sumapi.api import SumAPI
 
-            token = auth(username='<your_username>', password='<your_password')
-            api = SumAPI(token)
+            api = SumAPI(username='<your_username>, password='<your_password>')
         """
+        self.username = username
+        self.password = password
+
         try:
-            self.token = auth['access_token']
+            self.token = self._get_token()['access_token']
         except KeyError:
-            return "Error with Token, Check your auth and try again."
+            raise KeyError("Error with Token, Try again by checking your username and password.")
 
         self.headers = {
             'accept': 'application/json',
             'Authorization': f'Bearer {self.token}',
             'Content-Type': 'application/json'}
+
+    def _get_token(self):
+        """
+        Returns
+        -------
+        dict:
+            access_token: str
+                Your API Access Token
+            token_type: str
+                Your Token Type
+        """
+        login_data = {
+            'username': self.username,
+            'password': self.password
+        }
+
+        try:
+            response = requests.post(URL["tokenURL"], data=login_data)
+            response_json = response.json()
+        except JSONDecodeError:
+            return response
+        except ConnectionError as e:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+
+        if "detail" in response_json.keys():
+            if response_json['detail'] == 'Incorrect username or password':
+                raise ValueError("There is an error in the login information. Try again by checking your username and password.")
+
+        return response_json
+
+    def timeout_check(self, response_json):
+        if "detail" in response_json.keys():
+            if response_json['detail'] == 'Incorrect username or password':
+                self.headers = {
+                    'accept': 'application/json',
+                    'Authorization': f"Bearer {self._get_token()['access_token']}",
+                    'Content-Type': 'application/json'}
+                return True
+        else:
+            return False
 
     def prepare_data(self, body=None, domain=None, categories=None, context=None, question=None, percentage=None, word_count=None):
         """
@@ -86,11 +129,9 @@ class SumAPI:
 
             Examples
             --------
-            from sumapi.auth import auth
             from sumapi.api import SumAPI
 
-            token = auth(username='<your_username>', password='<your_password')
-            api = SumAPI(token)
+            api = SumAPI(username='<your_username>', password='<your_password')
 
             api.sentiment_analysis('Bu harika bir filmdi.', domain='general')
         """
@@ -99,6 +140,10 @@ class SumAPI:
         try:
             response = requests.post(URL['sentimentURL'], headers=self.headers, json=data)
             response_json = response.json()
+            if self.timeout_check(response_json) == True:
+                response = requests.post(URL['sentimentURL'], headers=self.headers, json=data)
+                response_json = response.json()
+                return response_json
         except JSONDecodeError:
             return response.content
         except ConnectionError:
@@ -135,11 +180,9 @@ class SumAPI:
                             The word's index in a sentence
             Examples
             --------
-            from sumapi.auth import auth
             from sumapi.api import SumAPI
 
-            token = auth(username='<your_username>', password='<your_password')
-            api = SumAPI(token)
+            api = SumAPI(username='<your_username>', password='<your_password')
 
             api.named_entity_recognition("GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi.", domain='general')
         """
@@ -147,6 +190,10 @@ class SumAPI:
         try:
             response = requests.post(URL['nerURL'], headers=self.headers, json=data)
             response_json = response.json()
+            if self.timeout_check(response_json) == True:
+                response = requests.post(URL['nerURL'], headers=self.headers, json=data)
+                response_json = response.json()
+                return response_json
         except JSONDecodeError:
             return response.content
         except ConnectionError:
@@ -179,11 +226,9 @@ class SumAPI:
 
             Examples
             --------
-            from sumapi.auth import auth
             from sumapi.api import SumAPI
 
-            token = auth(username='<your_username>', password='<your_password')
-            api = SumAPI(token)
+            api = SumAPI(username='<your_username>', password='<your_password')
 
             api.classification("GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi", domain='general')
             api.classification('Bankanızdan hiç memnun değilim, kredi ürününüz iyi çalışmıyor.', domain='finance')
@@ -193,6 +238,10 @@ class SumAPI:
         try:
             response = requests.post(URL['classificationURL'], headers=self.headers, json=data)
             response_json = response.json()
+            if self.timeout_check(response_json) == True:
+                response = requests.post(URL['classificationURL'], headers=self.headers, json=data)
+                response_json = response.json()
+                return response_json
         except JSONDecodeError:
             return response.content
         except ConnectionError:
@@ -228,11 +277,9 @@ class SumAPI:
                         Predicted label
             Examples
             --------
-            from sumapi.auth import auth
             from sumapi.api import SumAPI
 
-            token = auth(username='<your_username>', password='<your_password')
-            api = SumAPI(token)
+            api = SumAPI(username='<your_username>', password='<your_password')
 
             api.zero_shot_classification('Bu nasıl bir hizmet, gerçekten rezilsiniz.', categories='talep,şikayet,öneri')
         """
@@ -241,6 +288,10 @@ class SumAPI:
         try:
             response = requests.post(URL['zeroshotURL'], headers=self.headers, json=data)
             response_json = response.json()
+            if self.timeout_check(response_json) == True:
+                response = requests.post(URL['zeroshotURL'], headers=self.headers, json=data)
+                response_json = response.json()
+                return response_json
         except JSONDecodeError:
             return response.content
         except ConnectionError:
@@ -271,11 +322,9 @@ class SumAPI:
                         Predicted Answer
             Examples
             --------
-            from sumapi.auth import auth
             from sumapi.api import SumAPI
 
-            token = auth(username='<your_username>', password='<your_password')
-            api = SumAPI(token)
+            api = SumAPI(username='<your_username>', password='<your_password')
 
             context =
             ABASIYANIK, Sait Faik. Hikayeci (Adapazarı 23 Kasım 1906-İstanbul 11 Mayıs 1954). İlk öğrenimine Adapazarı’nda Rehber-i Terakki Mektebi’nde başladı. İki yıl kadar Adapazarı İdadisi’nde okudu. İstanbul Erkek Lisesi’nde devam ettiği orta öğrenimini Bursa Lisesi’nde tamamladı (1928). İstanbul Edebiyat Fakültesi’ne iki yıl devam ettikten sonra babasının isteği üzerine iktisat öğrenimi için İsviçre’ye gitti. Kısa süre sonra iktisat öğrenimini bırakarak Lozan’dan Grenoble’a geçti. Üç yıl başıboş bir edebiyat öğrenimi gördükten sonra babası tarafından geri çağrıldı (1933). Bir müddet Halıcıoğlu Ermeni Yetim Mektebi'nde Türkçe grup dersleri öğretmenliği yaptı. Ticarete atıldıysa da tutunamadı. Bir ay Haber gazetesinde adliye muhabirliği yaptı (1942). Babasının ölümü üzerine aileden kalan emlakin geliri ile avare bir hayata başladı. Evlenemedi. Yazları Burgaz adasındaki köşklerinde, kışları Şişli’deki apartmanlarında annesi ile beraber geçen bu fazla içkili bohem hayatı ömrünün sonuna kadar sürdü.
@@ -288,6 +337,10 @@ class SumAPI:
         try:
             response = requests.post(URL['questionURL'], headers=self.headers, json=data)
             response_json = response.json()
+            if self.timeout_check(response_json) == True:
+                response = requests.post(URL['questionURL'], headers=self.headers, json=data)
+                response_json = response.json()
+                return response_json
         except JSONDecodeError:
             return response.content
         except ConnectionError:
@@ -322,7 +375,6 @@ class SumAPI:
 
             Examples
             --------
-            from sumapi.auth import auth
             from sumapi.api import SumAPI
             import pandas as pd
 
@@ -338,11 +390,6 @@ class SumAPI:
                   "domain": "general"
                 },
                 {
-                  "body": "Bankanızdan hiç memnun değilim, kredi ürününüz iyi çalışmıyor.",
-                  "model_name": "classification",
-                  "domain": "finance"
-                },
-                {
                   "body": "Summarify, 2020 yılında istanbulda kurulmuş bir doğal dil işleme ve yapay zeka şirketidir..",
                   "model_name": "ner",
                   "domain": "general"
@@ -350,25 +397,29 @@ class SumAPI:
 
             print(df.head())
 
-            token = auth(username='<your_username>', password='<your_password')
-            api = SumAPI(token)
+            api = SumAPI(username='<your_username>', password='<your_password')
 
-            api.multi_request(data=data)
+            api.multi_request(data=df)
         """
         if len(data) > 250:
             packet_count = int(len(data) / 250)
             packet_odd = len(data) % 250
             evaluations = []
-
             try:
                 for packet in tqdm(range(1,packet_count+1), desc=f'Packet:'):
                     if packet == packet_count:
                         jdata = {"argList": json.loads(data[packet*250-250:packet*250+packet_odd].to_json(orient='records'))}
                         response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                        if self.timeout_check(response.json()) == True:
+                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                            evaluations += response.json()['evaluations']
                         evaluations += response.json()['evaluations']
                     else:
                         jdata = {"argList": json.loads(data[packet*250-250:packet*250].to_json(orient='records'))}
                         response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                        if self.timeout_check(response.json()) == True:
+                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                            evaluations += response.json()['evaluations']
                         evaluations += response.json()['evaluations']
             except JSONDecodeError:
                 return response.content
@@ -380,6 +431,10 @@ class SumAPI:
             try:
                 response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
                 response_json = response.json()
+                if self.timeout_check(response_json) == True:
+                    response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
+                    response_json = response.json()
+                    return response_json
                 return response_json
             except JSONDecodeError:
                 return response.content
@@ -414,11 +469,9 @@ class SumAPI:
 
             Examples
             --------
-            from sumapi.auth import auth
             from sumapi.api import SumAPI
 
-            token = auth(username='<your_username>', password='<your_password')
-            api = SumAPI(token)
+            api = SumAPI(username='<your_username>', password='<your_password')
             
             sample_text = "First of all, numerous software patches must be conducted to keep systems up to date. Cyber ​​attackers that use malware are trying to infiltrate company networks via abusing some undetected vulnerabilities within their software. According to a survey by security company Tripwire, one in three IT professionals said their company was infiltrated through an unpatched vulnerability. Thus, the validity of the patches should be constantly in check. Secondly, the devices that are connected to the network should be frequently monitored. Recognizing requests from devices that are connected to the main network is one of the most important areas of protection against malware. If the monitoring is missed, an evil ransomware gang can detect some vulnerabilities of the remote access doors. The more preferable scenario is having ethical hackers discover those potentially infected computers. Moreover, the most important data should be determined and an effective backup strategy should be implemented. It is very important to operate backups of important data to protect it against cyber attackers. If crypto ransomware enters the system and captures some devices, the data can be restored thanks to a recent backup, and the related devices can become operational in a short time. Yet, the first move of a hacker is almost always to cut access to those backups, so strong protection of those backups is also essential."
 
@@ -431,6 +484,10 @@ class SumAPI:
         try:
             response = requests.post(URL['summarizationURL'], headers=self.headers, json=data)
             response_json = response.json()
+            if self.timeout_check(response_json) == True:
+                response = requests.post(URL['summarizationURL'], headers=self.headers, json=data)
+                response_json = response.json()
+                return response_json
         except JSONDecodeError:
             return response.content
         except ConnectionError:
@@ -461,11 +518,9 @@ class SumAPI:
 
             Examples
             --------
-            from sumapi.auth import auth
             from sumapi.api import SumAPI
 
-            token = auth(username='<your_username>', password='<your_password>')
-            api = SumAPI(token)
+            api = SumAPI(username='<your_username>', password='<your_password>')
 
             api.spell_check('bu hstali cumle duzelexek gibi dutuyor.', domain='general')
         """
@@ -474,10 +529,12 @@ class SumAPI:
         try:
             response = requests.post(URL['spellCheckURL'], headers=self.headers, json=data)
             response_json = response.json()
+            if self.timeout_check(response_json) == True:
+                response = requests.post(URL['spellCheckURL'], headers=self.headers, json=data)
+                response_json = response.json()
+                return response_json
         except JSONDecodeError:
             return response.content
         except ConnectionError:
             raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
-        
-
         return response_json
