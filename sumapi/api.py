@@ -67,7 +67,7 @@ class SumAPI:
 
     def timeout_check(self, response_json):
         if "detail" in response_json.keys():
-            if response_json['detail'] == 'Incorrect username or password':
+            if response_json['detail'] == 'Could not validate credentials':
                 self.headers = {
                     'accept': 'application/json',
                     'Authorization': f"Bearer {self._get_token()['access_token']}",
@@ -413,6 +413,7 @@ class SumAPI:
                         if self.timeout_check(response.json()) == True:
                             response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                             evaluations += response.json()['evaluations']
+                            continue
                         evaluations += response.json()['evaluations']
                     else:
                         jdata = {"argList": json.loads(data[packet*250-250:packet*250].to_json(orient='records'))}
@@ -420,7 +421,9 @@ class SumAPI:
                         if self.timeout_check(response.json()) == True:
                             response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                             evaluations += response.json()['evaluations']
+                            continue
                         evaluations += response.json()['evaluations']
+                        
             except JSONDecodeError:
                 return response.content
             except ConnectionError:
