@@ -3,7 +3,7 @@ from tqdm import tqdm
 import json
 from json import JSONDecodeError
 from .config import URL
-
+import time
 
 class SumAPI:
     def __init__(self, username, password):
@@ -409,7 +409,19 @@ class SumAPI:
                 for packet in tqdm(range(1,packet_count+1), desc=f'Packet:'):
                     if packet == packet_count:
                         jdata = {"argList": json.loads(data[packet*250-250:packet*250+packet_odd].to_json(orient='records'))}
-                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                        try:
+                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                        except requests.exceptions.ConnectionError:
+                            print('Something wrong with server, sleeping 10 mins.')
+                            time.sleep(600)
+                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                            if self.timeout_check(response.json()) == True:
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                evaluations += response.json()['evaluations']
+                                continue
+                            evaluations += response.json()['evaluations']
+                            continue
+
                         if self.timeout_check(response.json()) == True:
                             response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                             evaluations += response.json()['evaluations']
@@ -417,7 +429,18 @@ class SumAPI:
                         evaluations += response.json()['evaluations']
                     else:
                         jdata = {"argList": json.loads(data[packet*250-250:packet*250].to_json(orient='records'))}
-                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                        try:
+                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                        except requests.exceptions.ConnectionError:
+                            print('Something wrong with server, sleeping 10 mins.')
+                            time.sleep(600)
+                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                            if self.timeout_check(response.json()) == True:
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                evaluations += response.json()['evaluations']
+                                continue
+                            evaluations += response.json()['evaluations']
+                            continue
                         if self.timeout_check(response.json()) == True:
                             response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                             evaluations += response.json()['evaluations']
