@@ -1,5 +1,5 @@
 
-BASE_URL = 'http://api.summarify.io'
+BASE_URL = 'https://api.summarify.io'
 URL = {
         'tokenURL': f'{BASE_URL}/token',
         'sentimentURL': f'{BASE_URL}/sentiment-analysis',

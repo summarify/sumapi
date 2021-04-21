@@ -349,7 +349,7 @@ class SumAPI:
         return response_json
 
 
-    def multi_request(self, data):
+    def multi_request(self, data, packet_size=250):
         """
             It allows you to make multiple queries to different products at the same time. We recommend this for large datasets.
 
@@ -401,14 +401,14 @@ class SumAPI:
 
             api.multi_request(data=df)
         """
-        if len(data) > 250:
-            packet_count = int(len(data) / 250)
-            packet_odd = len(data) % 250
+        if len(data) > packet_size:
+            packet_count = int(len(data) / packet_size)
+            packet_odd = len(data) % packet_size
             evaluations = []
             try:
                 for packet in tqdm(range(1,packet_count+1), desc=f'Packet:'):
                     if packet == packet_count:
-                        jdata = {"argList": json.loads(data[packet*250-250:packet*250+packet_odd].to_json(orient='records'))}
+                        jdata = {"argList": json.loads(data[packet*packet_size-packet_size:packet*packet_size+packet_odd].to_json(orient='records'))}
                         try:
                             response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                         except requests.exceptions.ConnectionError:
@@ -428,7 +428,7 @@ class SumAPI:
                             continue
                         evaluations += response.json()['evaluations']
                     else:
-                        jdata = {"argList": json.loads(data[packet*250-250:packet*250].to_json(orient='records'))}
+                        jdata = {"argList": json.loads(data[packet*packet_size-packet_size:packet*packet_size].to_json(orient='records'))}
                         try:
                             response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                         except requests.exceptions.ConnectionError:
