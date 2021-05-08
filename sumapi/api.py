@@ -510,10 +510,19 @@ class SumAPI:
                             jdata = {"argList": json.loads(data[packet*packet_size-packet_size:packet*packet_size+packet_odd].to_json(orient='records'))}
                             try:
                                 response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                                if response.json() == b'<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body bgcolor="white">\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n':
+                                if response.status_code == 502:
                                     print('Something wrong with server, sleeping 10 mins.')
                                     time.sleep(600)
                                     response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                    if response.status_code == 502:
+                                        print('Something wrong with server, sleeping 15 mins.')
+                                        time.sleep(900)
+                                        if self.timeout_check(response.json()) == True:
+                                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                        evaluations += response.json()['evaluations']
+                                        continue
+                                    evaluations += response.json()['evaluations']
+                                    continue
                                     if self.timeout_check(response.json()) == True:
                                         response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                                         evaluations += response.json()['evaluations']
@@ -524,6 +533,15 @@ class SumAPI:
                                 print('Something wrong with server, sleeping 10 mins.')
                                 time.sleep(600)
                                 response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                if response.status_code == 502:
+                                        print('Something wrong with server, sleeping 15 mins.')
+                                        time.sleep(900)
+                                        if self.timeout_check(response.json()) == True:
+                                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                        evaluations += response.json()['evaluations']
+                                        continue
+                                evaluations += response.json()['evaluations']
+                                continue
                                 if self.timeout_check(response.json()) == True:
                                     response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                                     evaluations += response.json()['evaluations']
@@ -539,7 +557,7 @@ class SumAPI:
                             jdata = {"argList": json.loads(data[packet*packet_size-packet_size:packet*packet_size+packet_odd].to_json(orient='records'))}
                             try:
                                 response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                                if response.json() == b'<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body bgcolor="white">\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n':
+                                if response.status_code == 502:
                                     print('Something wrong with server, sleeping 10 mins.')
                                     time.sleep(600)
                                     response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
@@ -573,6 +591,15 @@ class SumAPI:
                                     print('Something wrong with server, sleeping 10 mins.')
                                     time.sleep(600)
                                     response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                    if response.status_code == 502:
+                                        print('Something wrong with server, sleeping 15 mins.')
+                                        time.sleep(900)
+                                        if self.timeout_check(response.json()) == True:
+                                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                        evaluations += response.json()['evaluations']
+                                        continue
+                                    evaluations += response.json()['evaluations']
+                                    continue
                                     if self.timeout_check(response.json()) == True:
                                         response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                                         evaluations += response.json()['evaluations']
@@ -601,6 +628,15 @@ class SumAPI:
                                     print('Something wrong with server, sleeping 10 mins.')
                                     time.sleep(600)
                                     response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                    if response.status_code == 502:
+                                        print('Something wrong with server, sleeping 15 mins.')
+                                        time.sleep(900)
+                                        if self.timeout_check(response.json()) == True:
+                                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                        evaluations += response.json()['evaluations']
+                                        continue
+                                    evaluations += response.json()['evaluations']
+                                    continue
                                     if self.timeout_check(response.json()) == True:
                                         response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                                         evaluations += response.json()['evaluations']
@@ -636,8 +672,16 @@ class SumAPI:
                     print('Something wrong with server, sleeping 10 mins.')
                     time.sleep(600)
                     response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
+                    if response.status_code == 502:
+                        print('Something wrong with server, sleeping 15 mins.')
+                        time.sleep(900)
+                        if self.timeout_check(response.json()) == True:
+                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                        response_json = response.json()
+                        return response_json
                     response_json = response.json()
                     return response_json
+                    
                 response_json = response.json()
                 if self.timeout_check(response_json) == True:
                     response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
