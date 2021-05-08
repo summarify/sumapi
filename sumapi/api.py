@@ -518,8 +518,8 @@ class SumAPI:
                                         print('Something wrong with server, sleeping 15 mins.')
                                         time.sleep(900)
                                         if self.timeout_check(response.json()) == True:
-                                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                                        evaluations += response.json()['evaluations']
+                                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                            evaluations += response.json()['evaluations']
                                         continue
                                     evaluations += response.json()['evaluations']
                                     continue
@@ -537,9 +537,9 @@ class SumAPI:
                                         print('Something wrong with server, sleeping 15 mins.')
                                         time.sleep(900)
                                         if self.timeout_check(response.json()) == True:
-                                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                                        evaluations += response.json()['evaluations']
-                                        continue
+                                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                            evaluations += response.json()['evaluations']
+                                            continue
                                 evaluations += response.json()['evaluations']
                                 continue
                                 if self.timeout_check(response.json()) == True:
@@ -595,9 +595,9 @@ class SumAPI:
                                         print('Something wrong with server, sleeping 15 mins.')
                                         time.sleep(900)
                                         if self.timeout_check(response.json()) == True:
-                                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                                        evaluations += response.json()['evaluations']
-                                        continue
+                                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                            evaluations += response.json()['evaluations']
+                                            continue
                                     evaluations += response.json()['evaluations']
                                     continue
                                     if self.timeout_check(response.json()) == True:
@@ -632,9 +632,9 @@ class SumAPI:
                                         print('Something wrong with server, sleeping 15 mins.')
                                         time.sleep(900)
                                         if self.timeout_check(response.json()) == True:
-                                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                                        evaluations += response.json()['evaluations']
-                                        continue
+                                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                            evaluations += response.json()['evaluations']
+                                            continue
                                     evaluations += response.json()['evaluations']
                                     continue
                                     if self.timeout_check(response.json()) == True:
@@ -676,9 +676,9 @@ class SumAPI:
                         print('Something wrong with server, sleeping 15 mins.')
                         time.sleep(900)
                         if self.timeout_check(response.json()) == True:
-                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                        response_json = response.json()
-                        return response_json
+                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                            response_json = response.json()
+                            return response_json
                     response_json = response.json()
                     return response_json
                     
