@@ -14,7 +14,7 @@ class SumAPI:
             ----------
             username : str
                 Your API Username
-            password : str
+            password : str"
                 Your API Password
 
             Examples
@@ -27,9 +27,11 @@ class SumAPI:
         self.password = password
 
         try:
-            self.token = self._get_token()['access_token']
+            self.token =self._get_token()['access_token']
         except KeyError:
             raise KeyError("Error with Token, Try again by checking your username and password.")
+        except TypeError:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
 
         self.headers = {
             'accept': 'application/json',
@@ -348,126 +350,6 @@ class SumAPI:
 
         return response_json
 
-
-    def multi_request(self, data, packet_size=250):
-        """
-            It allows you to make multiple queries to different products at the same time. We recommend this for large datasets.
-
-            Parameters
-            ----------
-            data : pandas.dataframe
-                Your requests dataframe, an example can be find on Examples page.
-                body: str
-                    Your sample text.
-                model_name: str
-                    the product you want to run ['sentiment', 'classification', 'ner']
-                domain: str
-                    Model Domain, It may differ depending on the product.
-                        sentiment : ['general']
-                        classification: ['general', 'finance']
-                        ner: ['general']
-
-            Returns
-            -------
-            evaluations: dict
-                Outputs of all models are listed one by one. The output may vary depending on the product you use.
-
-
-            Examples
-            --------
-            from sumapi.api import SumAPI
-            import pandas as pd
-
-            df = pd.DataFrame([
-                {
-                  "body": "Bu güzel bir filmdi.",
-                  "model_name": "sentiment",
-                  "domain": "general"
-                },
-                {
-                  "body": "GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi..",
-                  "model_name": "classification",
-                  "domain": "general"
-                },
-                {
-                  "body": "Summarify, 2020 yılında istanbulda kurulmuş bir doğal dil işleme ve yapay zeka şirketidir..",
-                  "model_name": "ner",
-                  "domain": "general"
-                }])
-
-            print(df.head())
-
-            api = SumAPI(username='<your_username>', password='<your_password')
-
-            api.multi_request(data=df)
-        """
-        if len(data) > packet_size:
-            packet_count = int(len(data) / packet_size)
-            packet_odd = len(data) % packet_size
-            evaluations = []
-            try:
-                for packet in tqdm(range(1,packet_count+1), desc=f'Packet:'):
-                    if packet == packet_count:
-                        jdata = {"argList": json.loads(data[packet*packet_size-packet_size:packet*packet_size+packet_odd].to_json(orient='records'))}
-                        try:
-                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                        except requests.exceptions.ConnectionError:
-                            print('Something wrong with server, sleeping 10 mins.')
-                            time.sleep(600)
-                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                            if self.timeout_check(response.json()) == True:
-                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                                evaluations += response.json()['evaluations']
-                                continue
-                            evaluations += response.json()['evaluations']
-                            continue
-
-                        if self.timeout_check(response.json()) == True:
-                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                            evaluations += response.json()['evaluations']
-                            continue
-                        evaluations += response.json()['evaluations']
-                    else:
-                        jdata = {"argList": json.loads(data[packet*packet_size-packet_size:packet*packet_size].to_json(orient='records'))}
-                        try:
-                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                        except requests.exceptions.ConnectionError:
-                            print('Something wrong with server, sleeping 10 mins.')
-                            time.sleep(600)
-                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                            if self.timeout_check(response.json()) == True:
-                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                                evaluations += response.json()['evaluations']
-                                continue
-                            evaluations += response.json()['evaluations']
-                            continue
-                        if self.timeout_check(response.json()) == True:
-                            response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
-                            evaluations += response.json()['evaluations']
-                            continue
-                        evaluations += response.json()['evaluations']
-                        
-            except JSONDecodeError:
-                return response.content
-            except ConnectionError:
-                raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
-            
-            return {'evaluations': evaluations}
-        else:
-            try:
-                response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
-                response_json = response.json()
-                if self.timeout_check(response_json) == True:
-                    response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
-                    response_json = response.json()
-                    return response_json
-                return response_json
-            except JSONDecodeError:
-                return response.content
-            except ConnectionError:
-                raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
-
-
     def summarization(self, text, percentage=None, word_count=None, domain='SumBasic'):
         """
             It makes Summarization for the sentences / samples you send.
@@ -564,3 +446,208 @@ class SumAPI:
         except ConnectionError:
             raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
         return response_json
+
+    def multi_request(self, data, packet_size=250):
+        """
+            It allows you to make multiple queries to different products at the same time. We recommend this for large datasets.
+
+            Parameters
+            ----------
+            data : pandas.dataframe
+                Your requests dataframe, an example can be find on Examples page.
+                body: str
+                    Your sample text.
+                model_name: str
+                    the product you want to run ['sentiment', 'classification', 'ner']
+                domain: str
+                    Model Domain, It may differ depending on the product.
+                        sentiment : ['general']
+                        classification: ['general', 'finance']
+                        ner: ['general']
+
+            Returns
+            -------
+            evaluations: dict
+                Outputs of all models are listed one by one. The output may vary depending on the product you use.
+
+
+            Examples
+            --------
+            from sumapi.api import SumAPI
+            import pandas as pd
+
+            df = pd.DataFrame([
+                {
+                  "body": "Bu güzel bir filmdi.",
+                  "model_name": "sentiment",
+                  "domain": "general"
+                },
+                {
+                  "body": "GPT-3, Elon Musk ve Sam Altman tarafından kurulan OpenAI'in üzerinde birkaç yıldır çalışma yürüttüğü bir yapay zekâ teknolojisi..",
+                  "model_name": "classification",
+                  "domain": "general"
+                },
+                {
+                  "body": "Summarify, 2020 yılında istanbulda kurulmuş bir doğal dil işleme ve yapay zeka şirketidir..",
+                  "model_name": "ner",
+                  "domain": "general"
+                }])
+
+            print(df.head())
+
+            api = SumAPI(username='<your_username>', password='<your_password')
+
+            api.multi_request(data=df)
+        """
+        if len(data) > packet_size:
+            packet_count = int(len(data) / packet_size)
+            packet_odd = len(data) % packet_size
+            evaluations = []
+            try:
+                for packet in tqdm(range(1,packet_count+1), desc=f'Packet:'):
+                    if packet == packet_count:
+                        try:
+                            jdata = {"argList": json.loads(data[packet*packet_size-packet_size:packet*packet_size+packet_odd].to_json(orient='records'))}
+                            try:
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                if response.json() == b'<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body bgcolor="white">\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n':
+                                    print('Something wrong with server, sleeping 10 mins.')
+                                    time.sleep(600)
+                                    response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                    if self.timeout_check(response.json()) == True:
+                                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                        evaluations += response.json()['evaluations']
+                                        continue
+                                    evaluations += response.json()['evaluations']
+                                    continue
+                            except requests.exceptions.ConnectionError:
+                                print('Something wrong with server, sleeping 10 mins.')
+                                time.sleep(600)
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                if self.timeout_check(response.json()) == True:
+                                    response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                    evaluations += response.json()['evaluations']
+                                    continue
+                                evaluations += response.json()['evaluations']
+                                continue
+                            if self.timeout_check(response.json()) == True:
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                evaluations += response.json()['evaluations']
+                                continue
+                            evaluations += response.json()['evaluations']
+                        except KeyError:
+                            jdata = {"argList": json.loads(data[packet*packet_size-packet_size:packet*packet_size+packet_odd].to_json(orient='records'))}
+                            try:
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                if response.json() == b'<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body bgcolor="white">\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n':
+                                    print('Something wrong with server, sleeping 10 mins.')
+                                    time.sleep(600)
+                                    response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                    if self.timeout_check(response.json()) == True:
+                                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                        evaluations += response.json()['evaluations']
+                                        continue
+                                    evaluations += response.json()['evaluations']
+                                    continue
+                            except requests.exceptions.ConnectionError:
+                                print('Something wrong with server, sleeping 10 mins.')
+                                time.sleep(600)
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                if self.timeout_check(response.json()) == True:
+                                    response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                    evaluations += response.json()['evaluations']
+                                    continue
+                                evaluations += response.json()['evaluations']
+                                continue
+                            if self.timeout_check(response.json()) == True:
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                evaluations += response.json()['evaluations']
+                                continue
+                            evaluations += response.json()['evaluations']
+                    else:
+                        jdata = {"argList": json.loads(data[packet*packet_size-packet_size:packet*packet_size].to_json(orient='records'))}
+                        try:
+                            try:
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                if response.status_code == 502:
+                                    print('Something wrong with server, sleeping 10 mins.')
+                                    time.sleep(600)
+                                    response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                    if self.timeout_check(response.json()) == True:
+                                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                        evaluations += response.json()['evaluations']
+                                        continue
+                                    evaluations += response.json()['evaluations']
+                                    continue
+                            except requests.exceptions.ConnectionError:
+                                print('Something wrong with server, sleeping 10 mins.')
+                                time.sleep(600)
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                if self.timeout_check(response.json()) == True:
+                                    response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                    evaluations += response.json()['evaluations']
+                                    continue
+                                evaluations += response.json()['evaluations']
+                                continue
+                            if self.timeout_check(response.json()) == True:
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                evaluations += response.json()['evaluations']
+                                continue
+                            evaluations += response.json()['evaluations']
+                        except KeyError:
+                            try:
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                if response.status_code == 502:
+                                    print('Something wrong with server, sleeping 10 mins.')
+                                    time.sleep(600)
+                                    response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                    if self.timeout_check(response.json()) == True:
+                                        response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                        evaluations += response.json()['evaluations']
+                                        continue
+                                    evaluations += response.json()['evaluations']
+                                    continue
+                            except requests.exceptions.ConnectionError:
+                                print('Something wrong with server, sleeping 10 mins.')
+                                time.sleep(600)
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                if self.timeout_check(response.json()) == True:
+                                    response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                    evaluations += response.json()['evaluations']
+                                    continue
+                                evaluations += response.json()['evaluations']
+                                continue
+                            if self.timeout_check(response.json()) == True:
+                                response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
+                                evaluations += response.json()['evaluations']
+                                continue
+                            evaluations += response.json()['evaluations']
+                            
+            except JSONDecodeError:
+                return response.content
+            except ConnectionError:
+                raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+            
+            return {'evaluations': evaluations}
+        else:
+            try:
+                response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
+                if response.status_code == 502:
+                    print('Something wrong with server, sleeping 10 mins.')
+                    time.sleep(600)
+                    response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
+                    response_json = response.json()
+                    return response_json
+                response_json = response.json()
+                if self.timeout_check(response_json) == True:
+                    response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
+                    response_json = response.json()
+                    return response_json
+                return response_json
+            except JSONDecodeError:
+                return response.content
+            except ConnectionError:
+                raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+
+
+    
