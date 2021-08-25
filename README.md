@@ -142,6 +142,16 @@ api.spell_check('bu hstali cumle duzelexek gibi dutuyor.', domain='general')
 #}
 ```
 
+**Offensive Language Detection**
+```python
+from sumapi.api import SumAPI
+
+api = SumAPI(username='<your_username>', password='<your_password')
+
+api.offensive_lang_detection("hapisten çıkarsa gideceği tek yer musalla taşı olur tüm teröristlerle birlikte geber", domain='general')
+# {'body': 'Bu harika bir filmdi.', 'evaluation': {'label': 'Ofansif', 'score': 0.99938481321}}
+```
+
 **Zero Shot Classification**
 
 ```python

@@ -301,6 +301,52 @@ class SumAPI:
 
         return response_json
 
+    def offensive_lang_detection(self, text, domain='general'):
+        """
+            It makes Offensive Language Detection for Text.
+
+            Parameters
+            ----------
+            text : str
+                Your sample text
+            domain: str
+                Model Domain ['general']
+
+            Returns
+            -------
+            dict:
+                body: str
+                    Your sample text.
+                evaluation: dict
+                    label: str
+                        Predicted class / label
+                    score: float
+                        Prediction probability
+            
+            Examples
+            --------
+            from sumapi.api import SumAPI
+
+            api = SumAPI(username='<your_username>', password='<your_password')
+
+            api.offensive_lang_detection("hapisten çıkarsa gideceği tek yer musalla taşı olur tüm teröristlerle birlikte geber", domain='general')
+        """
+        data = self.prepare_data(context=context, question=question)
+
+        try:
+            response = requests.post(URL['offensiveLangURL'], headers=self.headers, json=data)
+            response_json = response.json()
+            if self.timeout_check(response_json) == True:
+                response = requests.post(URL['offensiveLangURL'], headers=self.headers, json=data)
+                response_json = response.json()
+                return response_json
+        except JSONDecodeError:
+            return response.content
+        except ConnectionError:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+
+        return response_json
+
     def question_answering(self, context, question):
         """
             It makes Question Answering with Context.
@@ -515,8 +561,8 @@ class SumAPI:
                                     time.sleep(600)
                                     response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                                     if response.status_code == 502:
-                                        print('Something wrong with server, sleeping 15 mins.')
-                                        time.sleep(900)
+                                        print('Something wrong with server, sleeping 20 mins.')
+                                        time.sleep(1200)
                                         if self.timeout_check(response.json()) == True:
                                             response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                                             evaluations += response.json()['evaluations']
@@ -534,8 +580,8 @@ class SumAPI:
                                 time.sleep(600)
                                 response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                                 if response.status_code == 502:
-                                        print('Something wrong with server, sleeping 15 mins.')
-                                        time.sleep(900)
+                                        print('Something wrong with server, sleeping 20 mins.')
+                                        time.sleep(1200)
                                         if self.timeout_check(response.json()) == True:
                                             response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                                             evaluations += response.json()['evaluations']
@@ -592,8 +638,8 @@ class SumAPI:
                                     time.sleep(600)
                                     response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                                     if response.status_code == 502:
-                                        print('Something wrong with server, sleeping 15 mins.')
-                                        time.sleep(900)
+                                        print('Something wrong with server, sleeping 20 mins.')
+                                        time.sleep(1200)
                                         if self.timeout_check(response.json()) == True:
                                             response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                                             evaluations += response.json()['evaluations']
@@ -629,8 +675,8 @@ class SumAPI:
                                     time.sleep(600)
                                     response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                                     if response.status_code == 502:
-                                        print('Something wrong with server, sleeping 15 mins.')
-                                        time.sleep(900)
+                                        print('Something wrong with server, sleeping 20 mins.')
+                                        time.sleep(1200)
                                         if self.timeout_check(response.json()) == True:
                                             response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                                             evaluations += response.json()['evaluations']
@@ -673,8 +719,8 @@ class SumAPI:
                     time.sleep(600)
                     response = requests.post(URL['multirequestURL'], headers=self.headers, json={"argList":json.loads(data.to_json(orient='records'))})
                     if response.status_code == 502:
-                        print('Something wrong with server, sleeping 15 mins.')
-                        time.sleep(900)
+                        print('Something wrong with server, sleeping 20 mins.')
+                        time.sleep(1200)
                         if self.timeout_check(response.json()) == True:
                             response = requests.post(URL['multirequestURL'], headers=self.headers, json=jdata, timeout=3600)
                             response_json = response.json()

@@ -10,4 +10,5 @@ URL = {
         'multirequestURL': f'{BASE_URL}/arguments',
         'summarizationURL': f'{BASE_URL}/summarize',
         'spellCheckURL': f'{BASE_URL}/spell-check'
+        'offensiveLangURL':f'{BASE_URL}/offensive-lang'
 }
