@@ -331,7 +331,7 @@ class SumAPI:
 
             api.offensive_lang_detection("hapisten çıkarsa gideceği tek yer musalla taşı olur tüm teröristlerle birlikte geber", domain='general')
         """
-        data = self.prepare_data(context=context, question=question)
+        data = self.prepare_data(body=text, domain=domain)
 
         try:
             response = requests.post(URL['offensiveLangURL'], headers=self.headers, json=data)

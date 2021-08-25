@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="sumapi",
-    version="0.3.0",
+    version="0.3.1",
     author="Summarify",
     author_email="info@summarify.io",
     description="API Library for SumAPI with Python",
