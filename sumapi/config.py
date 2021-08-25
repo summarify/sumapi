@@ -9,6 +9,6 @@ URL = {
         'questionURL': f'{BASE_URL}/qa',
         'multirequestURL': f'{BASE_URL}/arguments',
         'summarizationURL': f'{BASE_URL}/summarize',
-        'spellCheckURL': f'{BASE_URL}/spell-check'
+        'spellCheckURL': f'{BASE_URL}/spell-check',
         'offensiveLangURL':f'{BASE_URL}/offensive-lang'
 }
