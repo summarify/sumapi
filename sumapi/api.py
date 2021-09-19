@@ -6,7 +6,7 @@ from .config import URL
 import time
 
 class SumAPI:
-    def __init__(self, username, password):
+    def __init__(self, username, password, log=True):
         """
             In order to send requests in the API, you need to define your token in this class.
 
@@ -16,15 +16,18 @@ class SumAPI:
                 Your API Username
             password : str"
                 Your API Password
+            log: Boolean
+                If you want data about your processed data to be stored on summarify servers, you must set it to True, if you do not want it to be False.
 
             Examples
             --------
             from sumapi.api import SumAPI
 
-            api = SumAPI(username='<your_username>, password='<your_password>')
+            api = SumAPI(username='<your_username>, password='<your_password>', log=True)
         """
         self.username = username
         self.password = password
+        self.log = log
 
         try:
             self.token =self._get_token()['access_token']
@@ -33,10 +36,12 @@ class SumAPI:
         except TypeError:
             raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
 
+
         self.headers = {
             'accept': 'application/json',
             'Authorization': f'Bearer {self.token}',
             'Content-Type': 'application/json'}
+
 
     def _get_token(self):
         """
@@ -50,7 +55,8 @@ class SumAPI:
         """
         login_data = {
             'username': self.username,
-            'password': self.password
+            'password': self.password,
+            'scope': "" if self.log == True else "no_trace"
         }
 
         try:

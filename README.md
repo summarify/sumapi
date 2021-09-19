@@ -20,7 +20,7 @@ pip install sumapi
 In order to use the API, you first need to get token with your unique username and password. If you do not have a username and want to test the API, please contact us at [info@summarify.io](mailto:info@summarify.io).
 
 ```python
-from sumapi.auth import auth
+from sumapi.api import SumAPI
 
 api = SumAPI(username='<your_username>', password='<your_password')
 # {'access_token': 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', 'token_type': 'bearer'}
