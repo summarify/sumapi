@@ -93,7 +93,7 @@ class SumAPI:
                 'body': body,
                 'percentage': percentage,
                 'domain': domain,
-                'word_count': word_count
+                'sentence_count': word_count
             }
         elif categories != None:
             data = {
@@ -413,9 +413,10 @@ class SumAPI:
             percentage: float
                 Percentage of the text you want to summarize. It takes values between 0 and 1. 1 gives the shortest summary and 0 the longest summary.
             domain: str
-                Model Domain ['SumBasic','SumComplex']
+                Model Domain ['SumBasic','SumComplex', 'SumDeep']
                     SumBasic: Extraction Based Summarization with Statistical Algorithms
                     SumComplex: Abstraction Based Summarization with Cutting Edge Algorithms
+                    SumDeep: Abstraction Based Summarization with Cutting Edge Algorithms on News Domain
 
             Returns
             -------
@@ -435,9 +436,9 @@ class SumAPI:
             
             sample_text = "First of all, numerous software patches must be conducted to keep systems up to date. Cyber ​​attackers that use malware are trying to infiltrate company networks via abusing some undetected vulnerabilities within their software. According to a survey by security company Tripwire, one in three IT professionals said their company was infiltrated through an unpatched vulnerability. Thus, the validity of the patches should be constantly in check. Secondly, the devices that are connected to the network should be frequently monitored. Recognizing requests from devices that are connected to the main network is one of the most important areas of protection against malware. If the monitoring is missed, an evil ransomware gang can detect some vulnerabilities of the remote access doors. The more preferable scenario is having ethical hackers discover those potentially infected computers. Moreover, the most important data should be determined and an effective backup strategy should be implemented. It is very important to operate backups of important data to protect it against cyber attackers. If crypto ransomware enters the system and captures some devices, the data can be restored thanks to a recent backup, and the related devices can become operational in a short time. Yet, the first move of a hacker is almost always to cut access to those backups, so strong protection of those backups is also essential."
 
-            api.summarization(text=sample_text, percentage=0.5, domain='SumBasic')
+            api.summarization(text=sample_text, percentage=0.5, domain='SumExtraction')
             api.summarization(text=sample_text, percentage=0.5, domain='SumComplex')
-            api.summarization(text=sample_text, word_count=100, domain='SumComplex')
+            api.summarization(text=sample_text, word_count=100, domain='SumDeep')
         """
         data = self.prepare_data(body=text, domain=domain, percentage=percentage, word_count=word_count)
 
