@@ -416,8 +416,8 @@ class SumAPI:
                 Model Domain ['SumAbstraction-TR', 'SumExtraction-TR', 'SumExtraction-EN', 'SumAbstraction-EN']
                     - SumExtraction-TR: Extraction Based Summarization with Statistical Algorithms for Turkish
                     - SumAbstraction-TR: Abstraction Based Summarization with Cutting Edge Algorithms on News Domain for Turkish
-                    - SumExtraction-EN: Abstraction Based Summarization with Cutting Edge Algorithms for English
-                    - SumAbstraction-EN: Extraction Based Summarization with Statistical Algorithms for English
+                    - SumExtraction-EN: Extraction Based Summarization with Statistical Algorithms for English 
+                    - SumAbstraction-EN: Abstraction Based Summarization with Cutting Edge Algorithms for English
 
             Returns
             -------
