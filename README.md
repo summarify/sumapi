@@ -114,16 +114,32 @@ api.classification('Bankanızdan hiç memnun değilim, kredi ürününüz iyi ç
 
 **Summarization**
 
+- SumExtraction-TR: Extraction Based Summarization with Statistical Algorithms for Turkish
+- SumAbstraction-TR: Abstraction Based Summarization with Cutting Edge Algorithms on News Domain for Turkish
+- SumExtraction-EN: Abstraction Based Summarization with Cutting Edge Algorithms for English
+- SumAbstraction-EN: Extraction Based Summarization with Statistical Algorithms for English
+
 ```python
 from sumapi.api import SumAPI
 
 api = SumAPI(username='<your_username>', password='<your_password')
 
-sample_text = "First of all, numerous software patches must be conducted to keep systems up to date. Cyber ​​attackers that use malware are trying to infiltrate company networks via abusing some undetected vulnerabilities within their software. According to a survey by security company Tripwire, one in three IT professionals said their company was infiltrated through an unpatched vulnerability. Thus, the validity of the patches should be constantly in check. Secondly, the devices that are connected to the network should be frequently monitored. Recognizing requests from devices that are connected to the main network is one of the most important areas of protection against malware. If the monitoring is missed, an evil ransomware gang can detect some vulnerabilities of the remote access doors. The more preferable scenario is having ethical hackers discover those potentially infected computers. Moreover, the most important data should be determined and an effective backup strategy should be implemented. It is very important to operate backups of important data to protect it against cyber attackers. If crypto ransomware enters the system and captures some devices, the data can be restored thanks to a recent backup, and the related devices can become operational in a short time. Yet, the first move of a hacker is almost always to cut access to those backups, so strong protection of those backups is also essential."
+sample_text = """Ligin 30'uncu haftasında Gençlerbirliği'ne 2-1 yenilen Fenerbahçe, Kadıköy'deki son 4 maçında kazanamazken bu sezon iç sahada 6 yenilgi alarak rekor kırdı. 
+Sarı-lacivertli ekip 24'üncü haftada Galatasaray'a 1-0, 26'ncı haftada Göztepe'ye 1-0 yenildi.
+28'inci haftadaki Antalyaspor mücadelesinden 1-1 berabere ayrılan sarı-lacivertliler, 30'uncu haftada Gençlerbirliği'ne 2-1 kaybederek evinde 4 maç üst üste galip gelemedi. 
+İç saha kazanamama rekorunu da dünkü Gençlerbirliği maçı ile kıran Fenerbahçe; 1968-69, 1987-88 ve 1992-93 sezonlarında kendi evinde 5 kez mağlup olurken bu sezon Konyaspor'a 2-0, Beşiktaş'a 4-3, Yeni Malatyaspor'a 3-0, Galatasaray'a 1-0, Göztepe'ye 1-0, Gençlerbirliği'ne ise 2-1 mağlup olarak 6 kez iç sahada galibiyet elde edemedi.
+Fenerbahçeli taraftarlar, 24 puanla ligin son sırasında bulunan Gençlerbirliği'ne 2-1 yenilen sarı-lacivertli takımın teknik patronunu istifaya davet etti. 
+Sosyal medya hesapları üzerinden istifa çağrısında bulunan sarı-lacivertli taraftarlar Erol Bulut'la şampiyonluk yaşayacaklarına inançlarının kalmadıklarını dile getirdiler.
+Karşılaşmanın ardından yayıncı kuruluşa açıklamalarda bulunan Bulut ise deplasmanda kırılan rekorların yanı sıra evlerinde mağlup olarak rekor kırdıklarını dile getirdi. 
+Kötü gidişata dur diyemeyen Fenerbahçe'de Erol Bulut önlerindeki maçlara bakacaklarını ve sonuna kadar mücadele edeceklerini de sözlerine ekledi.
+Fenerbahçe'de Başkan Ali Koç ile sportif direktör Emre Belözoğlu, Beşiktaş derbisi öncesinde bir araya gelecek. 
+21 yıl sonra Kadıköy'de gelen Gençlerbirliği yenilgisinin ardından takımdaki son durum, teknik direktör Erol Bulut'un durumu ve hakem kararları ile ilgili görüşme gerçekleştirilecek. 
+Önemli oyuncular ile takım yeniden dizayn edilirken elde edilen başarısız sonuçların irdeleneceği görüşmede nasıl bir aksiyon alınacağı merak edilirken, kritik kararların alınması bekleniyor."""
 
-api.summarization(text=sample_text, percentage=0.5, domain='SumBasic')     
-api.summarization(text=sample_text, percentage=0.5, domain='SumComplex')
-api.summarization(text=sample_text, word_count=100, domain='SumDeep')
+api.summarization(text=sample_text, percentage=0.5, domain='SumExtraction-TR')
+api.summarization(text=sample_text, percentage=0.5, domain='SumAbstraction-TR')
+api.summarization(text=sample_text, word_count=100, domain='SumExtraction-EN')
+api.summarization(text=sample_text, word_count=100, domain='SumAbstraction-EN')
 ```
 
 **Spell Check**
