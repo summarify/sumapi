@@ -192,6 +192,16 @@ api.question_answering(context=context, question="Sait Faik nerede doğdu?")
 # {'body': 'Sait Faik nerede doğdu?', 'evaluation': {'score': 0.9611985087394714, 'answer': 'Adapazarı'}}
 ```
 
+**Next Character Prediction**
+
+```python
+from sumapi.api import SumAPI
+
+api = SumAPI(username='<your_username>', password='<your_password')
+
+api.next_character_prediction('Mustafa Kemal Atatürk', domain='general', max_length=100)
+```
+
 **Multi Argument**
 
 ```python

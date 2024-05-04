@@ -84,7 +84,7 @@ class SumAPI:
         else:
             return False
 
-    def prepare_data(self, body=None, domain=None, categories=None, context=None, question=None, percentage=None, word_count=None):
+    def prepare_data(self, body=None, domain=None, categories=None, context=None, question=None, percentage=None, word_count=None, max_length=None):
         """
             Function to create json for queries.
         """
@@ -109,6 +109,12 @@ class SumAPI:
             data = {
                 'body': body,
                 'domain': domain
+            }
+        elif max_length != None:
+            data = {
+                'body': body,
+                'domain': domain,
+                'max_length': max_length
             }
 
         return data
@@ -496,6 +502,48 @@ class SumAPI:
                 response = requests.post(URL['spellCheckURL'], headers=self.headers, json=data)
                 response_json = response.json()
                 return response_json
+        except JSONDecodeError:
+            return response.content
+        except ConnectionError:
+            raise ConnectionError("Error with Connection, Check your Internet Connection or visit api.summarify.io/status for SumAPI Status")
+        return response_json
+
+    def next_character_prediction(self, text, domain='sumgpt-small', max_length=100):
+        """
+            It makes next character prediction for your text.
+
+            Parameters
+            ----------
+            text : str
+                Your sample text.
+            domain: str
+                Model Domain ['sumgpt-small']
+            max_length: int
+                Parameter specifies the maximum number of tokens the text generator will produce, limiting the length of the generated text.
+
+            Returns
+            -------
+            dict:
+                body: str
+                    Your sample text.
+                evaluation: dict
+                    evaluation: str
+                        Predicted text
+
+            Examples
+            --------
+            from sumapi.api import SumAPI
+
+            api = SumAPI(username='<your_username>', password='<your_password>')
+
+            api.next_character_prediction('Mustafa Kemal Atatürk', domain='general', max_length=100)
+        """
+        data = self.prepare_data(body=text, domain=domain, max_length=max_length)
+
+        try:
+            response = requests.post(URL['nextCharacterPredictionURL'], headers=self.headers, json=data)
+            response_json = response.json()
+            
         except JSONDecodeError:
             return response.content
         except ConnectionError:
