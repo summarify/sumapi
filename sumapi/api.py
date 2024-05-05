@@ -105,16 +105,16 @@ class SumAPI:
                 'context': context,
                 'question': question
             }
-        elif domain != None:
-            data = {
-                'body': body,
-                'domain': domain
-            }
         elif max_length != None:
             data = {
                 'body': body,
                 'domain': domain,
                 'max_length': max_length
+            }
+        elif domain != None:
+            data = {
+                'body': body,
+                'domain': domain
             }
 
         return data
