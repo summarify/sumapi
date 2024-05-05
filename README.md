@@ -199,8 +199,10 @@ from sumapi.api import SumAPI
 
 api = SumAPI(username='<your_username>', password='<your_password')
 
-api.next_character_prediction('Mustafa Kemal Atatürk', domain='general', max_length=100)
+api.next_character_prediction('Mustafa Kemal Atatürk', domain='sumgpt-small', max_length=100)
+# {'body': 'Mustafa Kemal Atatürk', 'evaluation': {'generated_text': "Mustafa Kemal Atatürk, patriarkalizmin, tek partinin diktasını yıkmak için Samsun'a çıktığı ve bu uğurda, tüm dünyaya önderlik ettiği ve büyük bir özveriyle hareket ettiği gün olarak biliniyor.\nMustafa Kemal Atatürk bu yıl, 25-26 Ağustos tarihleri arasında gerçekleştirilecek olan 1. Ulusal Kurtuluş Günü etkinliklerine katılmak için Samsun'a çıktı.\nBu anlamlı günde gerçekleştirilecek etkinlikler içinde, Mustafa Kemal Atatürk'le ilgili bir sergi oluşturulacak ve ziyaretçilere takdim edilecek.\nSergide, Mustafa Kemal Atatürk'ün resmi"}}
 ```
+
 
 **Multi Argument**
 
